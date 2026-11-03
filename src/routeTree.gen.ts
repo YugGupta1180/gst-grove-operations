@@ -10,33 +10,115 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as DeadStockRouteImport } from './routes/dead-stock'
+import { Route as ProcurementRouteImport } from './routes/procurement'
+import { Route as ReceivingRouteImport } from './routes/receiving'
+import { Route as StorageRouteImport } from './routes/storage'
+import { Route as SyncRouteImport } from './routes/sync'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DeadStockRoute = DeadStockRouteImport.update({
+  id: '/dead-stock',
+  path: '/dead-stock',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProcurementRoute = ProcurementRouteImport.update({
+  id: '/procurement',
+  path: '/procurement',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReceivingRoute = ReceivingRouteImport.update({
+  id: '/receiving',
+  path: '/receiving',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StorageRoute = StorageRouteImport.update({
+  id: '/storage',
+  path: '/storage',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SyncRoute = SyncRouteImport.update({
+  id: '/sync',
+  path: '/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/dead-stock': typeof DeadStockRoute
+  '/procurement': typeof ProcurementRoute
+  '/receiving': typeof ReceivingRoute
+  '/storage': typeof StorageRoute
+  '/sync': typeof SyncRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/dead-stock': typeof DeadStockRoute
+  '/procurement': typeof ProcurementRoute
+  '/receiving': typeof ReceivingRoute
+  '/storage': typeof StorageRoute
+  '/sync': typeof SyncRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/dead-stock': typeof DeadStockRoute
+  '/procurement': typeof ProcurementRoute
+  '/receiving': typeof ReceivingRoute
+  '/storage': typeof StorageRoute
+  '/sync': typeof SyncRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/dead-stock'
+    | '/procurement'
+    | '/receiving'
+    | '/storage'
+    | '/sync'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/dead-stock'
+    | '/procurement'
+    | '/receiving'
+    | '/storage'
+    | '/sync'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/dead-stock'
+    | '/procurement'
+    | '/receiving'
+    | '/storage'
+    | '/sync'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRoute
+  DeadStockRoute: typeof DeadStockRoute
+  ProcurementRoute: typeof ProcurementRoute
+  ReceivingRoute: typeof ReceivingRoute
+  StorageRoute: typeof StorageRoute
+  SyncRoute: typeof SyncRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +130,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dead-stock': {
+      id: '/dead-stock'
+      path: '/dead-stock'
+      fullPath: '/dead-stock'
+      preLoaderRoute: typeof DeadStockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/procurement': {
+      id: '/procurement'
+      path: '/procurement'
+      fullPath: '/procurement'
+      preLoaderRoute: typeof ProcurementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/receiving': {
+      id: '/receiving'
+      path: '/receiving'
+      fullPath: '/receiving'
+      preLoaderRoute: typeof ReceivingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/storage': {
+      id: '/storage'
+      path: '/storage'
+      fullPath: '/storage'
+      preLoaderRoute: typeof StorageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sync': {
+      id: '/sync'
+      path: '/sync'
+      fullPath: '/sync'
+      preLoaderRoute: typeof SyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRoute,
+  DeadStockRoute: DeadStockRoute,
+  ProcurementRoute: ProcurementRoute,
+  ReceivingRoute: ReceivingRoute,
+  StorageRoute: StorageRoute,
+  SyncRoute: SyncRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
