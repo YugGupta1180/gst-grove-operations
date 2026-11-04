@@ -22,7 +22,7 @@ export const Route = createFileRoute("/receiving")({
 });
 
 function Receiving() {
-  const vendor = vendors[0];
+  const vendor = vendors[0]!;
   const [state, setState] = useState<"idle" | "scanning" | "done">("done");
   const [file, setFile] = useState("HUL_challan_88213.pdf");
   const [lines, setLines] = useState(invoiceLines);
@@ -70,7 +70,7 @@ function Receiving() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-muted/40 text-left text-xs text-muted-foreground"><tr>
-                {["Item", "HSN", "PO", "Billed", "Verified", "Batch", "Mfg", "Expiry", "Rate", "GST", ""].map((h) => <th key={h} className="px-3 py-2 font-medium">{h}</th>)}
+                {["Item", "HSN", "PO", "Billed", "Verified", "Batch", "Mfg", "Expiry", "Rate", "GST"].map((h) => <th key={h} className="px-3 py-2 font-medium">{h}</th>)}
               </tr></thead>
               <tbody className="divide-y divide-border">
                 {lines.map((l, i) => {
@@ -81,14 +81,13 @@ function Receiving() {
                       <td className="num px-3 py-2">{l.hsn}</td>
                       <td className="num px-3 py-2">{l.po}{poGap > 0 && <div className="text-[11px] text-warning">−{poGap} unbilled</div>}</td>
                       <td className="num px-3 py-2">{l.billed}</td>
-                      <td className="px-3 py-2"><Input type="number" value={l.verified} className={`num h-7 w-16 ${short > 0 ? "border-destructive text-destructive" : ""}`}
-                        onChange={(e) => setLines((ls) => ls.map((x, j) => j === i ? { ...x, verified: Math.max(0, +e.target.value) } : x))} /></td>
+                      <td className="space-y-1 px-3 py-2"><Input type="number" value={l.verified} className={`num h-7 w-16 ${short > 0 ? "border-destructive text-destructive" : ""}`}
+                        onChange={(e) => setLines((ls) => ls.map((x, j) => j === i ? { ...x, verified: Math.max(0, +e.target.value) } : x))} />{short > 0 && <Button size="sm" variant="destructive" className="h-6 px-2 text-[11px]" onClick={() => setDebit(l)}>Debit {inr(short * l.rate * (1 + l.gst / 100))}</Button>}</td>
                       <td className="num px-3 py-2">{l.batch}</td>
                       <td className="num px-3 py-2 text-xs">{l.mfg}</td>
                       <td className="num px-3 py-2 text-xs">{l.exp}</td>
                       <td className="num px-3 py-2">{inr(l.rate)}</td>
                       <td className="num px-3 py-2">{l.gst}%</td>
-                      <td className="px-3 py-2">{short > 0 && <Button size="sm" variant="destructive" className="h-7 text-xs" onClick={() => setDebit(l)}>Debit note {inr(short * l.rate * (1 + l.gst / 100))}</Button>}</td>
                     </tr>
                   );
                 })}
