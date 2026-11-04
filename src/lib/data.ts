@@ -83,6 +83,7 @@ export const channels = [
 
 export const navItems = [
   { to: "/dashboard", label: "Command Center" },
+  { to: "/pos", label: "Quick POS / Register" },
   { to: "/receiving", label: "Inward & OCR" },
   { to: "/procurement", label: "Procurement" },
   { to: "/storage", label: "FEFO Radar" },

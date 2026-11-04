@@ -2,15 +2,16 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import {
   LayoutDashboard, ScanLine, ShoppingCart, Layers, Network, PackageX,
-  type LucideIcon, ChevronsLeft, Search, Command as CmdIcon, Bell, Store, Package, Truck, FileText,
+  type LucideIcon, Receipt, ChevronsLeft, Search, Command as CmdIcon, Bell, Store, Package, Truck, FileText,
 } from "lucide-react";
 import {
   CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator,
 } from "@/components/ui/command";
 import { navItems, products, vendors, invoiceLines } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { hydrateStore } from "@/lib/store";
 
-const icons: LucideIcon[] = [LayoutDashboard, ScanLine, ShoppingCart, Layers, Network, PackageX];
+const icons: LucideIcon[] = [LayoutDashboard, Receipt, ScanLine, ShoppingCart, Layers, Network, PackageX];
 
 export function AppShell({ children }: { children: ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -18,6 +19,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
 
+  useEffect(() => { hydrateStore(); }, []);
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); setOpen((o) => !o); }
