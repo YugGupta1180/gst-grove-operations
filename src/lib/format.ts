@@ -28,3 +28,12 @@ export function needsReorder(stock: number, avgDaily: number, leadDays: number, 
 export function reorderQty(stock: number, avgDaily: number, leadDays: number, buffer: number, cycle = 15) {
   return Math.max(0, Math.ceil(avgDaily * (cycle + leadDays) + buffer - stock));
 }
+
+export type CartLine = { sku: string; name: string; qty: number; price: number; cost: number };
+
+/** Sale revenue at selling price; profit = (price - cost) * qty. */
+export function saleTotals(lines: CartLine[]) {
+  const revenue = lines.reduce((s, l) => s + l.price * l.qty, 0);
+  const profit = lines.reduce((s, l) => s + (l.price - l.cost) * l.qty, 0);
+  return { revenue, profit };
+}
