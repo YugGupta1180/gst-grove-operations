@@ -2,7 +2,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import {
   LayoutDashboard, ScanLine, ShoppingCart, Layers, Network, PackageX,
-  ChevronsLeft, Search, Command as CmdIcon, Bell, Store, Package, Truck, FileText,
+  type LucideIcon, ChevronsLeft, Search, Command as CmdIcon, Bell, Store, Package, Truck, FileText,
 } from "lucide-react";
 import {
   CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator,
@@ -10,7 +10,7 @@ import {
 import { navItems, products, vendors, invoiceLines } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
-const icons = [LayoutDashboard, ScanLine, ShoppingCart, Layers, Network, PackageX];
+const icons: LucideIcon[] = [LayoutDashboard, ScanLine, ShoppingCart, Layers, Network, PackageX];
 
 export function AppShell({ children }: { children: ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -38,7 +38,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
         <nav className="flex-1 space-y-0.5 p-2">
           {navItems.map((n, i) => {
-            const Icon = icons[i];
+            const Icon = icons[i] ?? Package;
             const active = path.startsWith(n.to);
             return (
               <Link key={n.to} to={n.to} title={n.label}
@@ -75,7 +75,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <CommandList>
           <CommandEmpty>No results.</CommandEmpty>
           <CommandGroup heading="Modules">
-            {navItems.map((n, i) => { const Icon = icons[i]; return <CommandItem key={n.to} onSelect={() => go(n.to)}><Icon className="size-4" />{n.label}</CommandItem>; })}
+            {navItems.map((n, i) => { const Icon = icons[i] ?? Package; return <CommandItem key={n.to} onSelect={() => go(n.to)}><Icon className="size-4" />{n.label}</CommandItem>; })}
           </CommandGroup>
           <CommandSeparator />
           <CommandGroup heading="SKUs">
