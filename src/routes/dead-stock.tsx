@@ -1,3 +1,4 @@
+import { useProducts } from "@/lib/store";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Sparkles, Search } from "lucide-react";
@@ -7,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { products } from "@/lib/data";
 import { inr, inrCompact } from "@/lib/format";
 
 export const Route = createFileRoute("/dead-stock")({
@@ -23,6 +23,7 @@ export const Route = createFileRoute("/dead-stock")({
 });
 
 function DeadStock() {
+  const products = useProducts();
   const [days, setDays] = useState("30");
   const [q, setQ] = useState("");
   const [markup, setMarkup] = useState([2]);

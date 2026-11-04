@@ -1,3 +1,4 @@
+import { useProducts, useSales } from "@/lib/store";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Area, AreaChart, Bar, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -6,8 +7,8 @@ import { toast } from "sonner";
 import { PageHeader, Pill } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { aiAlerts, capitalTrend, products, velocity } from "@/lib/data";
-import { inrCompact, needsReorder } from "@/lib/format";
+import { aiAlerts, capitalTrend } from "@/lib/data";
+import { inr, inrCompact, needsReorder } from "@/lib/format";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -24,6 +25,17 @@ export const Route = createFileRoute("/dashboard")({
 const tip = { contentStyle: { background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }, labelStyle: { color: "var(--muted-foreground)" } };
 
 function Dashboard() {
+  const products = useProducts();
+  const sales = useSales();
+  const posRev = sales.reduce((s, x) => s + x.revenue, 0);
+  const posProfit = sales.reduce((s, x) => s + x.profit, 0);
+  // MTD baseline before today's register sales
+  const baseRev = 4200000, baseProfit = 785400;
+  const margin = ((baseProfit + posProfit) / (baseRev + posRev)) * 100;
+  const velocity = products.slice(0, 8).map((p) => ({
+    name: p.brand === "Amul" ? p.name.split(" ").slice(0, 2).join(" ") : p.brand,
+    runRate: p.avgDaily * 7, buffer: p.avgDaily * p.leadDays + p.buffer, stock: p.stock,
+  }));
   const navigate = useNavigate();
   const [alerts, setAlerts] = useState(aiAlerts);
   const [filter, setFilter] = useState("all");
@@ -63,7 +75,8 @@ function Dashboard() {
           </button>
           <div className="panel p-4">
             <div className="flex items-center gap-2 text-xs text-muted-foreground"><Percent className="size-3.5" />Gross margin MTD</div>
-            <div className="num mt-1 text-xl font-semibold text-success">18.7%</div>
+            <div className="num mt-1 text-xl font-semibold text-success">{margin.toFixed(2)}%</div>
+            <div className="mt-1 text-xs text-muted-foreground">Register today: <span className="num text-success">+{inr(posProfit)}</span> profit · {sales.length} bills · {inr(posRev)}</div>
           </div>
         </div>
       </div>

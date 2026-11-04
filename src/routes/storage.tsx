@@ -1,3 +1,5 @@
+import type { Product } from "@/lib/data";
+import { useProducts } from "@/lib/store";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Shuffle, ClipboardCheck } from "lucide-react";
@@ -6,7 +8,6 @@ import { PageHeader, Pill } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { products } from "@/lib/data";
 import { inr } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -26,12 +27,13 @@ const age = (d: number) => (d < 15 ? "danger" : d <= 60 ? "warning" : "success")
 const ageLabel = (d: number) => (d < 15 ? "< 15d" : d <= 30 ? "15–30d" : d <= 60 ? "30–60d" : "> 60d");
 const racks = ["A", "B", "C", "D", "E"];
 
-function pickAudit() {
+function pickAudit(products: Product[]) {
   return [...products].sort((a, b) => b.cost * b.stock - a.cost * a.stock).slice(0, 9).sort(() => Math.random() - 0.5).slice(0, 5)
     .map((p) => ({ ...p, counted: "" as string }));
 }
 
 function Storage() {
+  const products = useProducts();
   const [filter, setFilter] = useState("all");
   const [audit, setAudit] = useState(() => products.slice(0, 5).map((p) => ({ ...p, counted: "" })));
   const fefo = [...products].sort((a, b) => a.expiryDays - b.expiryDays);
@@ -77,7 +79,7 @@ function Storage() {
         <div className="panel">
           <div className="flex items-center justify-between border-b border-border p-4">
             <div className="flex items-center gap-2 text-sm font-medium"><ClipboardCheck className="size-4 text-primary" />Shrinkage micro-audit</div>
-            <Button size="sm" variant="ghost" className="h-7 gap-1 text-xs" onClick={() => setAudit(pickAudit())}><Shuffle className="size-3.5" />Reshuffle</Button>
+            <Button size="sm" variant="ghost" className="h-7 gap-1 text-xs" onClick={() => setAudit(pickAudit(products))}><Shuffle className="size-3.5" />Reshuffle</Button>
           </div>
           <div className="divide-y divide-border">
             {audit.map((a, i) => {

@@ -1,3 +1,4 @@
+import { useProducts } from "@/lib/store";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { MessageCircle, Send } from "lucide-react";
@@ -7,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { products, vendorById, vendors, type Product } from "@/lib/data";
+import { vendorById, vendors, type Product } from "@/lib/data";
 import { inr, needsReorder, reorderQty } from "@/lib/format";
 
 export const Route = createFileRoute("/procurement")({
@@ -23,6 +24,7 @@ export const Route = createFileRoute("/procurement")({
 });
 
 function Procurement() {
+  const products = useProducts();
   const [vendor, setVendor] = useState("all");
   const [showAll, setShowAll] = useState(false);
   const [qty, setQty] = useState<Record<string, number>>({});
@@ -33,7 +35,7 @@ function Procurement() {
     .filter((p) => p.avgDaily > 0)
     .filter((p) => vendor === "all" || p.vendorId === vendor)
     .map((p) => ({ ...p, rop: p.avgDaily * p.leadDays + p.buffer, flag: needsReorder(p.stock, p.avgDaily, p.leadDays, p.buffer), suggest: reorderQty(p.stock, p.avgDaily, p.leadDays, p.buffer) }))
-    .filter((p) => showAll || p.flag), [vendor, showAll]);
+    .filter((p) => showAll || p.flag), [vendor, showAll, products]);
 
   const q = (p: (typeof rows)[number]) => qty[p.sku] ?? p.suggest;
   const total = rows.reduce((s, p) => s + q(p) * p.cost, 0);

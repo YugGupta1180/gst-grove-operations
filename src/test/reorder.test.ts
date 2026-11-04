@@ -17,3 +17,10 @@ describe("procurement rules", () => {
     expect(gstSplit(1000, 18)).toEqual({ cgst: 90, sgst: 90, igst: 0, total: 1180 });
   });
 });
+
+import { saleTotals } from "@/lib/format";
+describe("POS sale", () => {
+  it("profit is (price - cost) x qty", () => {
+    expect(saleTotals([{ sku: "a", name: "Amul Butter", qty: 2, price: 285, cost: 248 }])).toEqual({ revenue: 570, profit: 74 });
+  });
+});
