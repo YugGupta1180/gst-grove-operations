@@ -32,8 +32,8 @@ function Pos() {
 
   const add = (sku: string) => {
     const p = products.find((x) => x.sku === sku);
-    if (!p) return toast.error("Product not found", { description: sku });
-    if (inCart(sku) >= p.stock) return toast.error("Not enough stock", { description: `${p.stock} left of ${p.name}` });
+    if (!p) { toast.error("Product not found", { description: sku }); return; }
+    if (inCart(sku) >= p.stock) { toast.error("Not enough stock", { description: `${p.stock} left of ${p.name}` }); return; }
     setCart((c) => c.some((l) => l.sku === sku)
       ? c.map((l) => (l.sku === sku ? { ...l, qty: l.qty + 1 } : l))
       : [...c, { sku, name: p.name, qty: 1, price: p.mrp, cost: p.cost }]);
@@ -52,7 +52,7 @@ function Pos() {
   const { revenue, profit } = saleTotals(cart);
   const checkout = () => {
     const sale = completeSale(cart);
-    if (!sale) return toast.error("Sale failed", { description: "A quantity exceeds stock on hand." });
+    if (!sale) { toast.error("Sale failed", { description: "A quantity exceeds stock on hand." }); return; }
     setCart([]);
     toast.success(`Sale ${sale.id} completed`, { description: `${inr(sale.revenue)} billed · ${inr(sale.profit)} profit added to dashboard` });
     scanRef.current?.focus();
