@@ -1,3 +1,4 @@
+import { useProducts } from "@/lib/store";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Lock, RefreshCw } from "lucide-react";
@@ -5,7 +6,7 @@ import { toast } from "sonner";
 import { PageHeader, Pill } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { channels, products } from "@/lib/data";
+import { channels } from "@/lib/data";
 
 export const Route = createFileRoute("/sync")({
   head: () => ({
@@ -28,6 +29,7 @@ function split(stock: number, reserve: boolean) {
 }
 
 function Sync() {
+  const products = useProducts();
   const [global, setGlobal] = useState(true);
   const [overrides, setOverrides] = useState<Record<string, boolean>>({});
   const on = (sku: string) => overrides[sku] ?? global;

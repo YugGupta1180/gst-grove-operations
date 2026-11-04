@@ -1,3 +1,4 @@
+import { useProducts } from "@/lib/store";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Area, AreaChart, Bar, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -6,7 +7,7 @@ import { toast } from "sonner";
 import { PageHeader, Pill } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { aiAlerts, capitalTrend, products, velocity } from "@/lib/data";
+import { aiAlerts, capitalTrend } from "@/lib/data";
 import { inrCompact, needsReorder } from "@/lib/format";
 
 export const Route = createFileRoute("/dashboard")({
@@ -24,6 +25,7 @@ export const Route = createFileRoute("/dashboard")({
 const tip = { contentStyle: { background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }, labelStyle: { color: "var(--muted-foreground)" } };
 
 function Dashboard() {
+  const products = useProducts();
   const navigate = useNavigate();
   const [alerts, setAlerts] = useState(aiAlerts);
   const [filter, setFilter] = useState("all");
