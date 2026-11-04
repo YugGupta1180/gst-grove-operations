@@ -44,7 +44,7 @@ function Dashboard() {
           <div className="mt-2 flex items-end justify-between gap-4">
             <div><div className="num text-3xl font-semibold">{inrCompact(working)}</div><div className="mt-1 flex items-center gap-1 text-xs text-success"><TrendingUp className="size-3" />+4.1% vs last 30d</div></div>
             <div className="h-16 w-1/2">
-              <ResponsiveContainer><AreaChart data={capitalTrend}>
+              <ResponsiveContainer width="100%" height="100%"><AreaChart data={capitalTrend}>
                 <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="var(--primary)" stopOpacity={0.4} /><stop offset="1" stopColor="var(--primary)" stopOpacity={0} /></linearGradient></defs>
                 <Area dataKey="value" stroke="var(--primary)" fill="url(#g)" strokeWidth={1.5} />
               </AreaChart></ResponsiveContainer>
@@ -72,7 +72,7 @@ function Dashboard() {
         <div className="panel p-4 xl:col-span-3">
           <div className="mb-3 flex items-center justify-between"><div><div className="text-sm font-medium">Velocity health map</div><div className="text-xs text-muted-foreground">7-day run-rate vs safety buffer vs on-hand (units)</div></div></div>
           <div className="h-80">
-            <ResponsiveContainer><ComposedChart data={velocity}>
+            <ResponsiveContainer width="100%" height="100%"><ComposedChart data={velocity}>
               <CartesianGrid stroke="var(--border)" vertical={false} />
               <XAxis dataKey="name" tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} axisLine={false} tickLine={false} />
