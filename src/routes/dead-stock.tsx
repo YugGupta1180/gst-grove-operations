@@ -29,7 +29,7 @@ function DeadStock() {
   const [done, setDone] = useState<Record<string, string>>({});
   const rows = products.filter((p) => p.lastScanDays >= +days && p.name.toLowerCase().includes(q.toLowerCase()));
   const locked = rows.reduce((s, p) => s + p.stock * p.cost, 0);
-  const recover = rows.reduce((s, p) => s + p.stock * p.cost * (1 + markup[0] / 100), 0);
+  const recover = rows.reduce((s, p) => s + p.stock * p.cost * (1 + (markup[0] ?? 0) / 100), 0);
   const act = (sku: string, label: string, desc: string) => { setDone((d) => ({ ...d, [sku]: label })); toast.success(label, { description: desc }); };
 
   return (

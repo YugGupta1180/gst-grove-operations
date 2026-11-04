@@ -22,7 +22,7 @@ export const Route = createFileRoute("/receiving")({
 });
 
 function Receiving() {
-  const vendor = vendors[0];
+  const vendor = vendors[0]!;
   const [state, setState] = useState<"idle" | "scanning" | "done">("done");
   const [file, setFile] = useState("HUL_challan_88213.pdf");
   const [lines, setLines] = useState(invoiceLines);
