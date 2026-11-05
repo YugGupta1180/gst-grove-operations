@@ -24,3 +24,13 @@ describe("POS sale", () => {
     expect(saleTotals([{ sku: "a", name: "Amul Butter", qty: 2, price: 285, cost: 248 }])).toEqual({ revenue: 570, profit: 74 });
   });
 });
+
+import { costCreepPct, rtvEligible, rtvRecovery, shrinkage } from "@/lib/format";
+describe("margin protection", () => {
+  it("cost creep % vs previous rate", () => { expect(costCreepPct(124, 132)).toBe(6.5); });
+  it("RTV window is under 40 days to expiry", () => {
+    expect(rtvEligible(39)).toBe(true); expect(rtvEligible(40)).toBe(false); expect(rtvEligible(0)).toBe(false);
+  });
+  it("debit note adds GST", () => { expect(rtvRecovery(10, 100, 12).total).toBe(1120); });
+  it("shrinkage flags gaps over 5%", () => { expect(shrinkage(22, 16, 9).flagged).toBe(true); expect(shrinkage(140, 140, 2).flagged).toBe(false); });
+});

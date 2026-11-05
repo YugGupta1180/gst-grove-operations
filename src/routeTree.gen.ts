@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DeadStockRouteImport } from './routes/dead-stock'
+import { Route as MarginRouteImport } from './routes/margin'
 import { Route as PosRouteImport } from './routes/pos'
 import { Route as ProcurementRouteImport } from './routes/procurement'
 import { Route as ReceivingRouteImport } from './routes/receiving'
@@ -31,6 +32,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const DeadStockRoute = DeadStockRouteImport.update({
   id: '/dead-stock',
   path: '/dead-stock',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarginRoute = MarginRouteImport.update({
+  id: '/margin',
+  path: '/margin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PosRoute = PosRouteImport.update({
@@ -63,6 +69,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/dead-stock': typeof DeadStockRoute
+  '/margin': typeof MarginRoute
   '/pos': typeof PosRoute
   '/procurement': typeof ProcurementRoute
   '/receiving': typeof ReceivingRoute
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/dead-stock': typeof DeadStockRoute
+  '/margin': typeof MarginRoute
   '/pos': typeof PosRoute
   '/procurement': typeof ProcurementRoute
   '/receiving': typeof ReceivingRoute
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/dead-stock': typeof DeadStockRoute
+  '/margin': typeof MarginRoute
   '/pos': typeof PosRoute
   '/procurement': typeof ProcurementRoute
   '/receiving': typeof ReceivingRoute
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/dead-stock'
+    | '/margin'
     | '/pos'
     | '/procurement'
     | '/receiving'
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/dead-stock'
+    | '/margin'
     | '/pos'
     | '/procurement'
     | '/receiving'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/dead-stock'
+    | '/margin'
     | '/pos'
     | '/procurement'
     | '/receiving'
@@ -127,6 +139,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   DeadStockRoute: typeof DeadStockRoute
+  MarginRoute: typeof MarginRoute
   PosRoute: typeof PosRoute
   ProcurementRoute: typeof ProcurementRoute
   ReceivingRoute: typeof ReceivingRoute
@@ -155,6 +168,13 @@ declare module '@tanstack/react-router' {
       path: '/dead-stock'
       fullPath: '/dead-stock'
       preLoaderRoute: typeof DeadStockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/margin': {
+      id: '/margin'
+      path: '/margin'
+      fullPath: '/margin'
+      preLoaderRoute: typeof MarginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pos': {
@@ -199,6 +219,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   DeadStockRoute: DeadStockRoute,
+  MarginRoute: MarginRoute,
   PosRoute: PosRoute,
   ProcurementRoute: ProcurementRoute,
   ReceivingRoute: ReceivingRoute,

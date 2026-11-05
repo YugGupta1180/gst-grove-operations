@@ -1,7 +1,7 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import {
-  LayoutDashboard, ScanLine, ShoppingCart, Layers, Network, PackageX,
+  LayoutDashboard, ScanLine, ShoppingCart, Layers, Network, PackageX, ShieldAlert,
   type LucideIcon, Receipt, ChevronsLeft, Search, Command as CmdIcon, Bell, Store, Package, Truck, FileText,
 } from "lucide-react";
 import {
@@ -11,7 +11,7 @@ import { navItems, products, vendors, invoiceLines } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { hydrateStore } from "@/lib/store";
 
-const icons: LucideIcon[] = [LayoutDashboard, Receipt, ScanLine, ShoppingCart, Layers, Network, PackageX];
+const icons: LucideIcon[] = [LayoutDashboard, Receipt, ScanLine, ShoppingCart, Layers, Network, PackageX, ShieldAlert];
 
 export function AppShell({ children }: { children: ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
