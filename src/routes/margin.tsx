@@ -31,7 +31,7 @@ function Margin() {
   const creep = products
     .filter((p) => priceHistory[p.sku])
     .map((p) => {
-      const h = priceHistory[p.sku];
+      const h = priceHistory[p.sku]!;
       const pct = costCreepPct(h.prevCost, p.cost);
       return { p, h, pct, leak: (p.cost - h.prevCost) * p.avgDaily * 30, flagged: pct > 0 && !h.announced };
     })
@@ -44,7 +44,7 @@ function Margin() {
   const rtvTotal = rtv.reduce((s, x) => s + x.r.total, 0);
 
   const shrink = products.filter((p) => shelfCounts[p.sku])
-    .map((p) => ({ p, c: shelfCounts[p.sku], s: shrinkage(p.stock, shelfCounts[p.sku].counted, p.avgDaily) }))
+    .map((p) => ({ p, c: shelfCounts[p.sku]!, s: shrinkage(p.stock, shelfCounts[p.sku]!.counted, p.avgDaily) }))
     .sort((a, b) => b.s.gap * b.p.cost - a.s.gap * a.p.cost);
   const shrinkValue = shrink.filter((x) => x.s.flagged).reduce((s, x) => s + x.s.gap * x.p.cost, 0);
 
