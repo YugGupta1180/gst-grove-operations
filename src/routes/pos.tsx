@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { PageHeader, Pill } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { completeSale, useProducts, useSales } from "@/lib/store";
+import { completeSale, useAuthState, useProducts, useSales } from "@/lib/store";
 import { inr, saleTotals, type CartLine } from "@/lib/format";
 
 export const Route = createFileRoute("/pos")({
@@ -23,6 +23,7 @@ export const Route = createFileRoute("/pos")({
 function Pos() {
   const products = useProducts();
   const sales = useSales();
+  const isOwner = useAuthState().role === "owner";
   const [cart, setCart] = useState<CartLine[]>([]);
   const [q, setQ] = useState("");
   const scanRef = useRef<HTMLInputElement>(null);
@@ -108,7 +109,7 @@ function Pos() {
             </div>
             <div className="num space-y-1 border-t border-border p-4 text-sm">
               <div className="flex justify-between text-muted-foreground"><span>Items</span><span>{cart.reduce((s, l) => s + l.qty, 0)}</span></div>
-              <div className="flex justify-between text-muted-foreground"><span>Profit on bill</span><span className="text-success">{inr(profit)}</span></div>
+              {isOwner && <div className="flex justify-between text-muted-foreground"><span>Profit on bill</span><span className="text-success">{inr(profit)}</span></div>}
               <div className="flex justify-between text-lg font-semibold"><span>Total (incl. GST)</span><span>{inr(revenue)}</span></div>
               <Button className="mt-3 w-full" size="lg" disabled={!cart.length} onClick={checkout}>Complete Sale</Button>
             </div>
@@ -121,7 +122,7 @@ function Pos() {
               {sales.map((s) => (
                 <div key={s.id} className="num flex items-center justify-between p-3 text-xs">
                   <div><div className="text-sm">{s.id}</div><div className="text-muted-foreground">{new Date(s.ts).toLocaleTimeString("en-IN")} · {s.lines.reduce((a, l) => a + l.qty, 0)} items</div></div>
-                  <div className="text-right"><div className="text-sm">{inr(s.revenue)}</div><div className="text-success">+{inr(s.profit)}</div></div>
+                  <div className="text-right"><div className="text-sm">{inr(s.revenue)}</div>{isOwner && <div className="text-success">+{inr(s.profit)}</div>}</div>
                 </div>
               ))}
             </div>
