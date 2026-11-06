@@ -14,16 +14,262 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      inward_invoices: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          file_name: string
+          id: string
+          invoice_no: string
+          lines: Json
+          posted_at: string | null
+          status: string
+          tax: number
+          taxable: number
+          vendor_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          file_name?: string
+          id?: string
+          invoice_no: string
+          lines?: Json
+          posted_at?: string | null
+          status?: string
+          tax?: number
+          taxable?: number
+          vendor_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          file_name?: string
+          id?: string
+          invoice_no?: string
+          lines?: Json
+          posted_at?: string | null
+          status?: string
+          tax?: number
+          taxable?: number
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inward_invoices_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          avg_daily: number
+          batch: string
+          brand: string
+          buffer: number
+          category: string
+          cost: number
+          expiry_days: number
+          gst: number
+          hsn: string
+          last_scan_days: number
+          lead_days: number
+          mrp: number
+          name: string
+          rack: string
+          sku: string
+          stock: number
+          updated_at: string
+          vendor_id: string | null
+        }
+        Insert: {
+          avg_daily?: number
+          batch?: string
+          brand?: string
+          buffer?: number
+          category?: string
+          cost?: number
+          expiry_days?: number
+          gst?: number
+          hsn?: string
+          last_scan_days?: number
+          lead_days?: number
+          mrp?: number
+          name: string
+          rack?: string
+          sku: string
+          stock?: number
+          updated_at?: string
+          vendor_id?: string | null
+        }
+        Update: {
+          avg_daily?: number
+          batch?: string
+          brand?: string
+          buffer?: number
+          category?: string
+          cost?: number
+          expiry_days?: number
+          gst?: number
+          hsn?: string
+          last_scan_days?: number
+          lead_days?: number
+          mrp?: number
+          name?: string
+          rack?: string
+          sku?: string
+          stock?: number
+          updated_at?: string
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          branch: string
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          phone: string
+        }
+        Insert: {
+          branch?: string
+          created_at?: string
+          email?: string
+          full_name?: string
+          id: string
+          phone?: string
+        }
+        Update: {
+          branch?: string
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string
+        }
+        Relationships: []
+      }
+      sales: {
+        Row: {
+          created_at: string
+          id: string
+          lines: Json
+          profit: number
+          revenue: number
+          sale_no: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lines: Json
+          profit: number
+          revenue: number
+          sale_no: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lines?: Json
+          profit?: number
+          revenue?: number
+          sale_no?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      vendors: {
+        Row: {
+          city: string
+          gstin: string
+          id: string
+          name: string
+          phone: string
+          state: string
+        }
+        Insert: {
+          city?: string
+          gstin?: string
+          id: string
+          name: string
+          phone?: string
+          state?: string
+        }
+        Update: {
+          city?: string
+          gstin?: string
+          id?: string
+          name?: string
+          phone?: string
+          state?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      complete_sale: {
+        Args: { _lines: Json }
+        Returns: {
+          created_at: string
+          id: string
+          lines: Json
+          profit: number
+          revenue: number
+          sale_no: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "sales"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "owner" | "supervisor" | "cashier"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +396,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["owner", "supervisor", "cashier"],
+    },
   },
 } as const
