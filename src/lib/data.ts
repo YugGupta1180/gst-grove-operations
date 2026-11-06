@@ -81,39 +81,22 @@ export const channels = [
   { key: "web", label: "Online Storefront (Shopify)" },
 ] as const;
 
+export type NavRole = "owner" | "supervisor" | "cashier";
+const ALL: NavRole[] = ["owner", "supervisor", "cashier"];
+const MGMT: NavRole[] = ["owner", "supervisor"];
+const OWNER: NavRole[] = ["owner"];
+
+/** Sidebar modules and which staff roles may open them. */
 export const navItems = [
-  { to: "/dashboard", label: "Command Center" },
-  { to: "/pos", label: "Quick POS / Register" },
-  { to: "/receiving", label: "Inward & OCR" },
-  { to: "/procurement", label: "Procurement" },
-  { to: "/storage", label: "FEFO Radar" },
-  { to: "/sync", label: "Omnichannel Sync" },
-  { to: "/dead-stock", label: "Dead-Stock Studio" },
-  { to: "/margin", label: "Margin Protection & Audit" },
+  { to: "/dashboard", label: "Command Center", roles: OWNER },
+  { to: "/pos", label: "Quick POS / Register", roles: ALL },
+  { to: "/receiving", label: "Inward & OCR", roles: ALL },
+  { to: "/procurement", label: "Procurement", roles: MGMT },
+  { to: "/storage", label: "FEFO Radar", roles: MGMT },
+  { to: "/sync", label: "Omnichannel Sync", roles: MGMT },
+  { to: "/dead-stock", label: "Dead-Stock Studio", roles: OWNER },
+  { to: "/margin", label: "Margin Protection & Audit", roles: OWNER },
+  { to: "/team", label: "Team & Roles", roles: OWNER },
 ] as const;
 
-/** Last agreed purchase rate (₹/unit) before the latest scanned invoice. Latest rate = product.cost. */
-export const priceHistory: Record<string, { prevCost: number; invoice: string; announced: boolean }> = {
-  "FOR-SUN-1L": { prevCost: 124, invoice: "AWL/INV/55102", announced: false },
-  "AMU-BUT-500": { prevCost: 248, invoice: "GCM/24/7781", announced: true },
-  "MAG-NDL-280": { prevCost: 45, invoice: "NES/DL/31120", announced: false },
-  "TAT-SLT-1KG": { prevCost: 23, invoice: "TCP/MUM/9021", announced: true },
-  "ASH-ATA-5KG": { prevCost: 226, invoice: "ITC/KOL/4410", announced: true },
-  "DET-HW-RF": { prevCost: 94, invoice: "HUL/24/88213", announced: false },
-  "SUR-XL-1KG": { prevCost: 112, invoice: "HUL/24/88213", announced: false },
-  "KIS-KET-1KG": { prevCost: 118, invoice: "HUL/24/88213", announced: false },
-  "NES-KKT-4F": { prevCost: 198, invoice: "NES/DL/31120", announced: false },
-  "HUL-LUX-4": { prevCost: 121, invoice: "HUL/24/88213", announced: false },
-};
-
-/** Last physical shelf count (units) vs. what the system expects. */
-export const shelfCounts: Record<string, { counted: number; countedDaysAgo: number }> = {
-  "FOR-SUN-1L": { counted: 45, countedDaysAgo: 0 },
-  "AMU-BUT-500": { counted: 16, countedDaysAgo: 0 },
-  "MAG-NDL-280": { counted: 296, countedDaysAgo: 1 },
-  "NES-KKT-4F": { counted: 11, countedDaysAgo: 0 },
-  "DET-HW-RF": { counted: 140, countedDaysAgo: 2 },
-  "ITC-BIN-200": { counted: 221, countedDaysAgo: 1 },
-  "TAT-SLT-1KG": { counted: 57, countedDaysAgo: 0 },
-  "HUL-LUX-4": { counted: 41, countedDaysAgo: 3 },
-};
+export const homeFor = (role: NavRole) => (role === "cashier" ? "/pos" : role === "supervisor" ? "/procurement" : "/dashboard");

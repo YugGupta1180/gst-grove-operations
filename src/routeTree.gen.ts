@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DeadStockRouteImport } from './routes/dead-stock'
 import { Route as MarginRouteImport } from './routes/margin'
@@ -18,10 +19,16 @@ import { Route as ProcurementRouteImport } from './routes/procurement'
 import { Route as ReceivingRouteImport } from './routes/receiving'
 import { Route as StorageRouteImport } from './routes/storage'
 import { Route as SyncRouteImport } from './routes/sync'
+import { Route as TeamRouteImport } from './routes/team'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -64,9 +71,15 @@ const SyncRoute = SyncRouteImport.update({
   path: '/sync',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TeamRoute = TeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/dead-stock': typeof DeadStockRoute
   '/margin': typeof MarginRoute
@@ -75,9 +88,11 @@ export interface FileRoutesByFullPath {
   '/receiving': typeof ReceivingRoute
   '/storage': typeof StorageRoute
   '/sync': typeof SyncRoute
+  '/team': typeof TeamRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/dead-stock': typeof DeadStockRoute
   '/margin': typeof MarginRoute
@@ -86,10 +101,12 @@ export interface FileRoutesByTo {
   '/receiving': typeof ReceivingRoute
   '/storage': typeof StorageRoute
   '/sync': typeof SyncRoute
+  '/team': typeof TeamRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/dead-stock': typeof DeadStockRoute
   '/margin': typeof MarginRoute
@@ -98,11 +115,13 @@ export interface FileRoutesById {
   '/receiving': typeof ReceivingRoute
   '/storage': typeof StorageRoute
   '/sync': typeof SyncRoute
+  '/team': typeof TeamRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/dashboard'
     | '/dead-stock'
     | '/margin'
@@ -111,9 +130,11 @@ export interface FileRouteTypes {
     | '/receiving'
     | '/storage'
     | '/sync'
+    | '/team'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/dashboard'
     | '/dead-stock'
     | '/margin'
@@ -122,9 +143,11 @@ export interface FileRouteTypes {
     | '/receiving'
     | '/storage'
     | '/sync'
+    | '/team'
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/dashboard'
     | '/dead-stock'
     | '/margin'
@@ -133,10 +156,12 @@ export interface FileRouteTypes {
     | '/receiving'
     | '/storage'
     | '/sync'
+    | '/team'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   DashboardRoute: typeof DashboardRoute
   DeadStockRoute: typeof DeadStockRoute
   MarginRoute: typeof MarginRoute
@@ -145,6 +170,7 @@ export interface RootRouteChildren {
   ReceivingRoute: typeof ReceivingRoute
   StorageRoute: typeof StorageRoute
   SyncRoute: typeof SyncRoute
+  TeamRoute: typeof TeamRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -154,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -212,11 +245,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SyncRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/team': {
+      id: '/team'
+      path: '/team'
+      fullPath: '/team'
+      preLoaderRoute: typeof TeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   DashboardRoute: DashboardRoute,
   DeadStockRoute: DeadStockRoute,
   MarginRoute: MarginRoute,
@@ -225,6 +266,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReceivingRoute: ReceivingRoute,
   StorageRoute: StorageRoute,
   SyncRoute: SyncRoute,
+  TeamRoute: TeamRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
