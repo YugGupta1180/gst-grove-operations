@@ -50,11 +50,11 @@ function Pos() {
   };
 
   const { revenue, profit } = saleTotals(cart);
-  const checkout = () => {
-    const sale = completeSale(cart);
-    if (!sale) { toast.error("Sale failed", { description: "A quantity exceeds stock on hand." }); return; }
+  const checkout = async () => {
+    const { sale, error } = await completeSale(cart);
+    if (!sale) { toast.error("Sale failed", { description: error }); return; }
     setCart([]);
-    toast.success(`Sale ${sale.id} completed`, { description: `${inr(sale.revenue)} billed · ${inr(sale.profit)} profit added to dashboard` });
+    toast.success(`Sale ${sale.id} completed`, { description: `${inr(sale.revenue)} billed` });
     scanRef.current?.focus();
   };
 
