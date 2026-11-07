@@ -26,9 +26,10 @@ const useStore = () => useSyncExternalStore(subscribe, () => state, () => initia
 type ProductRow = {
   sku: string; name: string; brand: string; hsn: string; gst: number; cost: number; mrp: number; stock: number;
   avg_daily: number; vendor_id: string | null; lead_days: number; buffer: number; last_scan_days: number;
-  rack: string; batch: string; expiry_days: number; category: string;
+  rack: string; batch: string; expiry_days: number; category: string; status?: string | null;
 };
 const toProduct = (r: ProductRow): Product => ({
+  status: r.status ?? undefined,
   sku: r.sku, name: r.name, brand: r.brand, hsn: r.hsn, gst: +r.gst, cost: +r.cost, mrp: +r.mrp, stock: r.stock,
   avgDaily: +r.avg_daily, vendorId: r.vendor_id ?? "", leadDays: r.lead_days, buffer: r.buffer,
   lastScanDays: r.last_scan_days, rack: r.rack, batch: r.batch, expiryDays: r.expiry_days, category: r.category,
