@@ -2,12 +2,13 @@ import { describe, expect, it } from "vitest";
 import { inrCompact, needsReorder, reorderQty, gstSplit } from "@/lib/format";
 
 describe("procurement rules", () => {
-  it("flags reorder when stock <= avg*lead + buffer", () => {
-    expect(needsReorder(74, 18, 3, 20)).toBe(true);
-    expect(needsReorder(75, 18, 3, 20)).toBe(false);
+  it("flags reorder when stock <= avg*lead + 5", () => {
+    expect(needsReorder(59, 18, 3)).toBe(true);
+    expect(needsReorder(60, 18, 3)).toBe(false);
   });
-  it("orders enough for a 15-day cycle", () => {
-    expect(reorderQty(46, 18, 3, 20)).toBe(18 * 18 + 20 - 46);
+  it("suggests avg daily × 15 units", () => {
+    expect(reorderQty(18)).toBe(270);
+    expect(reorderQty(2.5)).toBe(38);
   });
   it("formats lakhs and crores", () => {
     expect(inrCompact(432000)).toBe("₹4.32 L");

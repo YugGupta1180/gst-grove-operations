@@ -81,7 +81,9 @@ export type Database = {
           name: string
           rack: string
           sku: string
+          status: string | null
           stock: number
+          suggested_order_qty: number | null
           updated_at: string
           vendor_id: string | null
         }
@@ -101,7 +103,9 @@ export type Database = {
           name: string
           rack?: string
           sku: string
+          status?: string | null
           stock?: number
+          suggested_order_qty?: number | null
           updated_at?: string
           vendor_id?: string | null
         }
@@ -121,7 +125,9 @@ export type Database = {
           name?: string
           rack?: string
           sku?: string
+          status?: string | null
           stock?: number
+          suggested_order_qty?: number | null
           updated_at?: string
           vendor_id?: string | null
         }

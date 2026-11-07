@@ -40,7 +40,7 @@ function Dashboard() {
   const [alerts, setAlerts] = useState(aiAlerts);
   const [filter, setFilter] = useState("all");
   const working = products.reduce((s, p) => s + p.stock * p.cost, 0) * 18.4;
-  const risk = products.filter((p) => needsReorder(p.stock, p.avgDaily, p.leadDays, p.buffer) && p.avgDaily > 0).length;
+  const risk = products.filter((p) => needsReorder(p.stock, p.avgDaily, p.leadDays) && p.avgDaily > 0).length;
   const dead = products.filter((p) => p.lastScanDays > 45).reduce((s, p) => s + p.stock * p.cost, 0);
   const shown = alerts.filter((a) => filter === "all" || a.severity === filter);
 

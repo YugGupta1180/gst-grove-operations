@@ -1,4 +1,6 @@
 export type Product = {
+  /** Database-computed: "Reorder Needed" | "In Stock" */
+  status?: string;
   sku: string;
   name: string;
   brand: string;
