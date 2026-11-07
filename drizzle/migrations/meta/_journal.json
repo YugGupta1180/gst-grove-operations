@@ -8,6 +8,13 @@
       "when": 1793940116547,
       "tag": "0000_retail_core",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794040280910,
+      "tag": "0001_product_reorder_status",
+      "breakpoints": true
     }
   ]
 }
