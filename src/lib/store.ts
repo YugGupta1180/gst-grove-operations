@@ -91,4 +91,13 @@ export async function completeSale(lines: CartLine[]): Promise<{ sale?: Sale; er
   return { sale: toSale(data as unknown as SaleRow) };
 }
 
+/** Manually set a product's on-hand count (owner/supervisor; enforced by RLS). */
+export async function updateStock(sku: string, stock: number): Promise<string | null> {
+  const { data, error } = await supabase.from("products").update({ stock, updated_at: new Date().toISOString() }).eq("sku", sku).select("sku");
+  if (error) return error.message;
+  if (!data?.length) return "You don't have permission to edit stock";
+  await refreshData();
+  return null;
+}
+
 export async function signOut() { await supabase.auth.signOut(); }
