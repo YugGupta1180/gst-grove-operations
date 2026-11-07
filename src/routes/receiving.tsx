@@ -106,7 +106,7 @@ function Receiving() {
             <Button disabled={posted || state !== "done"} onClick={async () => {
               const { data: u } = await supabase.auth.getUser();
               const invoice_no = file === "HUL_challan_88213.pdf" ? "HUL/24/88213" : `GRN-014-${Date.now().toString().slice(-5)}`;
-              const { error } = await supabase.from("inward_invoices").upsert({ invoice_no, vendor_id: vendor.id, file_name: file, status: "posted", lines, taxable, tax: tax.c + tax.s, created_by: u.user?.id, posted_at: new Date().toISOString() }, { onConflict: "invoice_no" });
+              const { error } = await supabase.from("inward_invoices").upsert({ invoice_no, vendor_id: vendor.id, file_name: file, status: "posted", lines, taxable, tax: tax.c + tax.s, created_by: u.user?.id ?? null, posted_at: new Date().toISOString() }, { onConflict: "invoice_no" });
               if (error) { toast.error("Couldn't save invoice", { description: error.message }); return; }
               setPosted(true); toast.success("Saved to inward ledger", { description: `${invoice_no} · ${lines.length} lines` });
             }}>

@@ -63,7 +63,7 @@ function Team() {
                 <td className="text-xs">{u.branch || "—"}</td>
                 <td className="pr-3">
                   {u.id === userId ? <Pill tone="info">{labels.owner} (you)</Pill> : (
-                    <Select value={u.role ?? undefined} onValueChange={(v) => change(u.id, v as Role)}>
+                    <Select value={u.role ?? ""} onValueChange={(v) => change(u.id, v as Role)}>
                       <SelectTrigger className="h-8"><SelectValue placeholder="No role" /></SelectTrigger>
                       <SelectContent>{(Object.keys(labels) as Role[]).map((r) => <SelectItem key={r} value={r}>{labels[r]}</SelectItem>)}</SelectContent>
                     </Select>
