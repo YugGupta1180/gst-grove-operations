@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { UploadCloud, FileText, CheckCircle2, Loader2, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import { PageHeader, Pill } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -102,7 +103,13 @@ function Receiving() {
               <div><div className="text-muted-foreground">IGST</div>{inr(0, 2)}</div>
               <div><div className="text-muted-foreground">Total</div><span className="font-semibold">{inr(taxable + tax.c + tax.s, 2)}</span></div>
             </div>
-            <Button disabled={posted || state !== "done"} onClick={() => { setPosted(true); toast.success("Pushed to inward ledger", { description: `GRN-014-${Date.now().toString().slice(-5)} · ${lines.length} lines` }); }}>
+            <Button disabled={posted || state !== "done"} onClick={async () => {
+              const { data: u } = await supabase.auth.getUser();
+              const invoice_no = file === "HUL_challan_88213.pdf" ? "HUL/24/88213" : `GRN-014-${Date.now().toString().slice(-5)}`;
+              const { error } = await supabase.from("inward_invoices").upsert({ invoice_no, vendor_id: vendor.id, file_name: file, status: "posted", lines, taxable, tax: tax.c + tax.s, created_by: u.user?.id ?? null, posted_at: new Date().toISOString() }, { onConflict: "invoice_no" });
+              if (error) { toast.error("Couldn't save invoice", { description: error.message }); return; }
+              setPosted(true); toast.success("Saved to inward ledger", { description: `${invoice_no} · ${lines.length} lines` });
+            }}>
               {posted ? "Posted ✓" : "Approve & Push to Inward Ledger"}
             </Button>
           </div>
