@@ -8,8 +8,8 @@ import { PageHeader, Pill } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { ShelfMap, expiryLabel, expiryTone } from "@/components/ShelfMap";
 import { inr } from "@/lib/format";
-import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/storage")({
   head: () => ({
@@ -23,10 +23,6 @@ export const Route = createFileRoute("/storage")({
   component: Storage,
 });
 
-const age = (d: number) => (d < 15 ? "danger" : d <= 60 ? "warning" : "success") as "danger" | "warning" | "success";
-const ageLabel = (d: number) => (d < 15 ? "< 15d" : d <= 30 ? "15–30d" : d <= 60 ? "30–60d" : "> 60d");
-const racks = ["A", "B", "C", "D", "E"];
-
 function pickAudit(products: Product[]) {
   return [...products].sort((a, b) => b.cost * b.stock - a.cost * a.stock).slice(0, 9).sort(() => Math.random() - 0.5).slice(0, 5)
     .map((p) => ({ ...p, counted: "" as string }));
@@ -37,7 +33,7 @@ function Storage() {
   const [filter, setFilter] = useState("all");
   const [audit, setAudit] = useState(() => products.slice(0, 5).map((p) => ({ ...p, counted: "" })));
   const fefo = [...products].sort((a, b) => a.expiryDays - b.expiryDays);
-  const match = (d: number) => filter === "all" || age(d) === filter;
+  const match = (d: number) => filter === "all" || expiryTone(d) === filter;
 
   return (
     <>
@@ -49,32 +45,7 @@ function Storage() {
       </PageHeader>
 
       <div className="grid gap-4 xl:grid-cols-3">
-        <div className="panel p-4 xl:col-span-2">
-          <div className="mb-3 text-sm font-medium">Rack health matrix</div>
-          <div className="grid gap-3">
-            {racks.map((r) => (
-              <div key={r} className="flex items-center gap-3">
-                <div className="num w-14 text-xs text-muted-foreground">Rack {r}</div>
-                <div className="grid flex-1 grid-cols-4 gap-2">
-                  {[1, 2, 3, 4].map((s) => {
-                    const p = products.find((x) => x.rack === `${r}${s}`);
-                    if (!p) return <div key={s} className="h-16 rounded-md border border-dashed border-border" />;
-                    const t = age(p.expiryDays);
-                    return (
-                      <div key={s} title={p.name} className={cn("h-16 rounded-md border p-2 transition-opacity",
-                        t === "danger" ? "border-destructive/40 bg-destructive/12" : t === "warning" ? "border-warning/40 bg-warning/12" : "border-success/30 bg-success/10",
-                        !match(p.expiryDays) && "opacity-20")}>
-                        <div className="num text-[10px] text-muted-foreground">{r}{s} · {p.batch}</div>
-                        <div className="truncate text-xs font-medium">{p.name}</div>
-                        <div className="num text-[10px]">{p.expiryDays}d left · {p.stock} u</div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <ShelfMap products={products} filter={filter} />
 
         <div className="panel">
           <div className="flex items-center justify-between border-b border-border p-4">
@@ -103,7 +74,7 @@ function Storage() {
           <thead className="bg-muted/40 text-left text-xs text-muted-foreground"><tr>{["#", "Item", "Batch", "Rack", "Qty", "Days left", "Aging"].map((h) => <th key={h} className="px-3 py-2 font-medium">{h}</th>)}</tr></thead>
           <tbody className="divide-y divide-border">
             {fefo.filter((p) => match(p.expiryDays)).map((p, i) => (
-              <tr key={p.sku}><td className="num px-3 py-2 text-muted-foreground">{i + 1}</td><td className="px-3 py-2">{p.name}</td><td className="num px-3 py-2">{p.batch}</td><td className="num px-3 py-2">{p.rack}</td><td className="num px-3 py-2">{p.stock}</td><td className="num px-3 py-2">{p.expiryDays}</td><td className="px-3 py-2"><Pill tone={age(p.expiryDays)}>{ageLabel(p.expiryDays)}</Pill></td></tr>
+              <tr key={p.sku}><td className="num px-3 py-2 text-muted-foreground">{i + 1}</td><td className="px-3 py-2">{p.name}</td><td className="num px-3 py-2">{p.batch}</td><td className="num px-3 py-2">{p.rack}</td><td className="num px-3 py-2">{p.stock}</td><td className="num px-3 py-2">{p.expiryDays}</td><td className="px-3 py-2"><Pill tone={expiryTone(p.expiryDays)}>{expiryLabel(p.expiryDays)}</Pill></td></tr>
             ))}
           </tbody>
         </table>
