@@ -19,14 +19,17 @@ export function gstSplit(taxable: number, rate: number, interState = false) {
     : { cgst: tax / 2, sgst: tax / 2, igst: 0, total: taxable + tax };
 }
 
-/** Reorder rule: stock <= avgDaily * leadDays + buffer */
-export function needsReorder(stock: number, avgDaily: number, leadDays: number, buffer: number) {
-  return stock <= avgDaily * leadDays + buffer;
+/** Fixed safety buffer used by the reorder rule (mirrors products.status in the database). */
+export const SAFETY_BUFFER = 5;
+
+/** Reorder rule: stock <= avgDaily * leadDays + 5 */
+export function needsReorder(stock: number, avgDaily: number, leadDays: number) {
+  return stock <= avgDaily * leadDays + SAFETY_BUFFER;
 }
 
-/** Quantity to cover a 15-day cycle plus lead time and buffer, minus stock on hand. */
-export function reorderQty(stock: number, avgDaily: number, leadDays: number, buffer: number, cycle = 15) {
-  return Math.max(0, Math.ceil(avgDaily * (cycle + leadDays) + buffer - stock));
+/** Suggested order quantity: avgDaily * 15 (15-day cycle). */
+export function reorderQty(avgDaily: number, cycle = 15) {
+  return Math.ceil(avgDaily * cycle);
 }
 
 export type CartLine = { sku: string; name: string; qty: number; price: number; cost: number };
